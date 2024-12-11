@@ -13,7 +13,7 @@ import (
 )
 
 func init() {
-	log.SetupLog(slog.LevelInfo)
+    log.SetupLog(slog.LevelInfo)
     slog.Info(fmt.Sprintf("origin: %v", origin))
 }
 ```
