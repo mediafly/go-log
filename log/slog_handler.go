@@ -3,6 +3,7 @@ package log
 import (
 	"context"
 	"fmt"
+	"io"
 	"log/slog"
 	"os"
 	"reflect"
@@ -114,13 +115,20 @@ func fmtErr(err error) slog.Value {
 }
 
 func SetupLog(logLevel slog.Level) {
+	setupLog(logLevel, os.Stdout)
+}
 
+func SetupLogWithWriter(logLevel slog.Level, writer io.Writer) {
+	setupLog(logLevel, writer)
+}
+
+func setupLog(logLevel slog.Level, writer io.Writer) {
 	handlerOptions := &slog.HandlerOptions{
 		Level:       logLevel, // Set the desired log level,
 		ReplaceAttr: replaceAttr,
 	}
 
-	jsonHandler := slog.NewJSONHandler(os.Stdout, handlerOptions)
+	jsonHandler := slog.NewJSONHandler(writer, handlerOptions)
 	ctxHandler := ContextHandler{jsonHandler}
 
 	ddvars := slog.Group("dd",
